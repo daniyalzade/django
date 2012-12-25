@@ -606,6 +606,14 @@ class QuerySet(object):
     # PUBLIC METHODS THAT ALTER ATTRIBUTES AND RETURN A NEW QUERYSET #
     ##################################################################
 
+    def with_hints(self, *args, **kwargs):
+        clone = self._clone()
+        for hint in args:
+            clone.query.add_hint(self.model, hint)
+        for model, hint in kwargs.items():
+            clone.query.add_hint(model, hint)
+        return clone
+
     def all(self):
         """
         Returns a new QuerySet that is a copy of the current one. This allows a
